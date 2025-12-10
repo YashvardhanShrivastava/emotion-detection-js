@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:5000/api";
+const API_BASE = "https://emotion-detection-js.onrender.com/api";
 
 // Start webcam
 async function startVideo() {

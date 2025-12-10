@@ -1,5 +1,5 @@
 // frontend/app.js
-const API_BASE = "http://localhost:5000/api";
+const API_BASE = "https://emotion-detection-js.onrender.com/api";
 
 const nameInput = document.getElementById("name");
 const emailInput = document.getElementById("email");
@@ -13,6 +13,7 @@ function showMessage(text, isError = false) {
   messageDiv.style.color = isError ? "#f87171" : "#6ee7b7";
 }
 
+// SIGNUP
 if (signupBtn) {
   signupBtn.addEventListener("click", async () => {
     try {
@@ -39,6 +40,7 @@ if (signupBtn) {
   });
 }
 
+// LOGIN
 if (loginBtn) {
   loginBtn.addEventListener("click", async () => {
     try {
@@ -59,7 +61,6 @@ if (loginBtn) {
       localStorage.setItem("token", data.token);
       showMessage("Login successful");
 
-      // Redirect to dashboard
       setTimeout(() => {
         window.location.href = "dashboard.html";
       }, 500);
