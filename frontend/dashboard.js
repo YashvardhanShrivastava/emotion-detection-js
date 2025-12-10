@@ -12,7 +12,7 @@ async function startVideo() {
   }
 }
 
-// Load models from correct CDN
+// Load models
 async function loadModels() {
   const MODEL_URL = "https://raw.githubusercontent.com/vladmandic/face-api/master/model/";
 
@@ -21,7 +21,7 @@ async function loadModels() {
   await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
 }
 
-// Detect emotions realtime
+// Detect emotions
 async function detectEmotion() {
   const video = document.getElementById("video");
 
@@ -32,7 +32,7 @@ async function detectEmotion() {
         .withFaceExpressions();
 
       if (!result) {
-        document.getElementById("emotionText").innerText = "No face detected...";
+        document.getElementById("emotionText").innerText = "No face detected…";
         return;
       }
 
@@ -50,31 +50,35 @@ async function detectEmotion() {
   });
 }
 
-// Save emotion to backend
+// Save emotion log
 async function saveEmotion(emotion, confidence) {
   const token = localStorage.getItem("token");
   if (!token) return;
 
-  await fetch(`${API_BASE}/emotion/log`, {
-    method: "POST",
-    headers: {
-      "Authorization": "Bearer " + token,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      emotion,
-      confidence,
-      source: "webcam"
-    })
-  });
+  try {
+    await fetch(`${API_BASE}/emotion/log`, {
+      method: "POST",
+      headers: {
+        "Authorization": "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        emotion,
+        confidence,
+        source: "webcam",
+      }),
+    });
+  } catch (err) {
+    console.error("Save error:", err);
+  }
 }
 
 // MAIN
 (async function () {
-  document.getElementById("emotionText").innerText = "Loading models...";
+  document.getElementById("emotionText").innerText = "Loading models…";
   await loadModels();
 
-  document.getElementById("emotionText").innerText = "Starting camera...";
+  document.getElementById("emotionText").innerText = "Starting camera…";
   await startVideo();
 
   detectEmotion();
